@@ -8,7 +8,6 @@ This is a Python FastAPI implementation of the Voice Connector Template.
 - Text-to-speech endpoint with API key authentication
 - Swagger API documentation
 - CORS support
-- Logging
 - Docker support
 
 ## Getting Started

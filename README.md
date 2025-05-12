@@ -15,7 +15,6 @@ Both implementations provide the same core functionality:
 - Text-to-speech endpoint with API key authentication (`POST /tts/{voice}`)
 - Swagger API documentation
 - CORS support
-- Logging
 - Docker support
 
 ## Getting Started
