@@ -26,7 +26,7 @@ This is a Node.js Express implementation of the Voice Connector Template, mirror
 3. Install dependencies:
 
 ```bash
-npm install
+yarn install
 ```
 
 ### Running the Application
@@ -34,7 +34,7 @@ npm install
 #### Development Mode
 
 ```bash
-npm run dev
+yarn run dev
 ```
 
 This will start the server with nodemon, which automatically restarts the server when changes are detected.
@@ -42,7 +42,7 @@ This will start the server with nodemon, which automatically restarts the server
 #### Production Mode
 
 ```bash
-npm start
+yarn start
 ```
 
 ### Docker
@@ -62,7 +62,7 @@ docker build . --target builder -t express-connector:0.0.1
 #### Running the Docker Container
 
 ```bash
-make docker-run
+make run
 ```
 
 or

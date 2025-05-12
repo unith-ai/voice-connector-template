@@ -110,7 +110,7 @@ http://localhost:8080/docs
 This provides an interactive interface to explore the API endpoints, send test requests, and view response formats.
 
 Alternative URL:
-- http://localhost:8080/redoc (ReDoc alternative UI)
+- http://localhost:8080/docs
 
 ## License
 
