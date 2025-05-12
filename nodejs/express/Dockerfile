@@ -4,10 +4,10 @@ WORKDIR /connector
 
 # Copy package.json and package-lock.json
 COPY ./package.json ./package.json
-COPY ./package-lock.json ./package-lock.json
+COPY ./yarn.lock ./yarn.lock
 
 # Install dependencies
-RUN npm install
+RUN yarn install
 
 # Copy the source code
 COPY . .
