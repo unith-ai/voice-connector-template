@@ -28,6 +28,7 @@ A set of examples to develop a private voice connector for the Unith platform.
 - PCM format
 - 16-bit
 - Number of channels: 1
+- wav format
 
 ## Time cost processing examples
 
