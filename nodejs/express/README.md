@@ -118,6 +118,15 @@ Alternative URLs:
 - http://localhost:8080/docs (redirects to /api-docs)
 - http://localhost:8080/redoc (redirects to /api-docs)
 
+## Integration with Unith Platform
+Once you have the API running, you can integrate it with the Unith Platform.
+Please contact with your Unith Platform administrator to register and configure the API key and other settings.
+
+You should provide:
+- unique name for the connector
+- base URL of your service
+- unith_voice_x_api
+
 ## License
 
 ISC
