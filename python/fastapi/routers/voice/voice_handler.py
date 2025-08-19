@@ -6,6 +6,7 @@ from fastapi import Header
 from fastapi import HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel
+from .elevenlabs_sample import make_elevenlabs_tts_sample
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ async def process_text_to_speech(
     text = request.text
     logger.info(f"Processing TTS for voice: {voice} with text: {text}")
     try:
-        audio_data = b""
+        audio_data: bytes = await make_elevenlabs_tts_sample(voice, request.text)
         # Return as a binary response with the correct content type
         return Response(
             content=audio_data,

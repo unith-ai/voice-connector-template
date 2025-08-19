@@ -1,5 +1,6 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
+const {makeElevenlabsTtsSample} = require("./elevenlabs_sample");
 
 const router = express.Router();
 
@@ -77,7 +78,7 @@ router.post('/tts/:voice', [
   try {
     // In a real implementation, this would call a TTS service
     // For now, we'll just return an empty audio buffer
-    const audioData = Buffer.from('');
+    const audioData = await makeElevenlabsTtsSample(voice, text);
 
     // Return as a binary response with the correct content type
     res.setHeader('Content-Type', 'audio/wav');

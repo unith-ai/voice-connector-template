@@ -111,6 +111,15 @@ This provides an interactive interface to explore the API endpoints, send test r
 Alternative URL:
 - http://localhost:8080/docs
 
+## Integration with Unith Platform
+Once you have the API running, you can integrate it with the Unith Platform.
+Please contact with your Unith Platform administrator to register and configure the API key and other settings.
+
+You should provide:
+- unique name for the connector
+- base URL of your service
+- unith_voice_x_api
+
 ## License
 
 ISC
