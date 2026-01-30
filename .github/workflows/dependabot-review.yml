@@ -52,7 +52,7 @@ jobs:
                - If there are merge conflicts, resolve them
                - Commit any fixes with clear commit messages
 
-            4. **Post a review summary** as a PR comment including:
+            4. **Provide a review summary** (will be automatically posted) including:
                - Update type (patch/minor/major)
                - Security implications
                - Test results (pass/fail)
@@ -60,12 +60,7 @@ jobs:
                - Your recommendation (safe to merge / needs attention)
 
             Do NOT approve or merge the PR - leave that to humans.
-          claude_args: "--max-turns 25 --model claude-sonnet-4-5-20250929"
+            Do NOT manually run `gh pr comment` - the summary will be posted automatically.
+          claude_args: "--max-turns 25 --model claude-sonnet-4-5-20250929 --dangerously-skip-permissions"
           allowed_bots: "dependabot[bot]"
           use_sticky_comment: true
-          additional_permissions: |
-            - "run yarn commands for installing and testing"
-            - "run poetry commands for installing and testing"
-            - "run curl for health checks"
-            - "run gh commands for PR operations"
-            - "run node and python for testing"
