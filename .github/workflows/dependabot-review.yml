@@ -8,6 +8,7 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write
 
 jobs:
   # Only run for Dependabot PRs
@@ -60,4 +61,3 @@ jobs:
 
             Do NOT approve or merge the PR - leave that to humans.
           claude_args: "--max-turns 15 --model claude-sonnet-4-5-20250929"
-          allowed_tools: "Bash,Read,Edit,Write,Glob,Grep"
