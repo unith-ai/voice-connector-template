@@ -1,0 +1,63 @@
+name: Dependabot Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  # Only run for Dependabot PRs
+  review:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Set up both environments for testing
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install poetry
+
+      # Claude reviews, tests, and fixes issues
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            You are reviewing a Dependabot dependency update PR. Your job is to:
+
+            1. **Analyze the update:**
+               - Identify the package and version change (patch/minor/major)
+               - Check if it fixes security vulnerabilities
+               - Review changelog for breaking changes
+
+            2. **Run tests:**
+               - For Node.js changes in `nodejs/express/`: run `cd nodejs/express && yarn install && yarn start` and test health endpoint
+               - For Python changes in `python/fastapi/`: run `cd python/fastapi && poetry install && poetry run python main.py` and test health endpoint
+
+            3. **Fix issues if found:**
+               - If tests fail due to breaking changes, update code to be compatible
+               - If there are merge conflicts, resolve them
+               - Commit any fixes with clear commit messages
+
+            4. **Post a review summary** as a PR comment including:
+               - Update type (patch/minor/major)
+               - Security implications
+               - Test results (pass/fail)
+               - Any fixes you made
+               - Your recommendation (safe to merge / needs attention)
+
+            Do NOT approve or merge the PR - leave that to humans.
+          claude_args: "--max-turns 15 --model claude-sonnet-4-5-20250929"
+          allowed_tools: "Bash,Read,Edit,Write,Glob,Grep"

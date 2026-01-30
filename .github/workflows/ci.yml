@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call: # Allow reuse by other workflows
+
+jobs:
+  test-nodejs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nodejs/express
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+          cache-dependency-path: nodejs/express/yarn.lock
+      - run: yarn install
+      - run: yarn start &
+      - run: sleep 3 && curl -f http://localhost:8080/health-check
+
+  test-python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python/fastapi
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install poetry
+      - run: poetry install
+      - run: poetry run python main.py &
+      - run: sleep 3 && curl -f http://localhost:8080/health-check
