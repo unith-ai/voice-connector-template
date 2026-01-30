@@ -60,6 +60,12 @@ jobs:
                - Your recommendation (safe to merge / needs attention)
 
             Do NOT approve or merge the PR - leave that to humans.
-          claude_args: "--max-turns 15 --model claude-sonnet-4-5-20250929"
+          claude_args: "--max-turns 25 --model claude-sonnet-4-5-20250929"
           allowed_bots: "dependabot[bot]"
           use_sticky_comment: true
+          additional_permissions: |
+            - "run yarn commands for installing and testing"
+            - "run poetry commands for installing and testing"
+            - "run curl for health checks"
+            - "run gh commands for PR operations"
+            - "run node and python for testing"
