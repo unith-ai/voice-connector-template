@@ -62,3 +62,4 @@ jobs:
             Do NOT approve or merge the PR - leave that to humans.
           claude_args: "--max-turns 15 --model claude-sonnet-4-5-20250929"
           allowed_bots: "dependabot[bot]"
+          use_sticky_comment: true
