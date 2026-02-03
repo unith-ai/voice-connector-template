@@ -5,8 +5,10 @@ from fastapi import APIRouter
 from fastapi import Header
 from fastapi import HTTPException
 from fastapi.responses import Response
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from .elevenlabs_sample import make_elevenlabs_tts_sample
+from .elevenlabs_streaming_sample import make_elevenlabs_stream_tts_sample
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +16,10 @@ voice_router = APIRouter()
 
 
 class TTSRequest(BaseModel):
+    text: str
+
+
+class StreamTTSRequest(BaseModel):
     text: str
 
 
@@ -27,7 +33,6 @@ async def process_text_to_speech(
     if unith_voice_x_api != "12345678":
         raise HTTPException(status_code=401, detail="Invalid API Key")
 
-    voice = voice
     text = request.text
     logger.info(f"Processing TTS for voice: {voice} with text: {text}")
     try:
@@ -42,6 +47,48 @@ async def process_text_to_speech(
     except httpx.RequestError as exc:
         logger.error(f"Request error: {exc}")
         raise HTTPException(status_code=503, detail=f"Service unavailable: {exc}")
+    except Exception as exc:
+        logger.error(f"Unexpected error: {exc}")
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(exc)}")
+
+
+@voice_router.post("/stream-tts/{voice}")
+async def stream_text_to_speech(
+        voice: str,
+        request: StreamTTSRequest,
+        unith_voice_x_api: str = Header(None, description="API Key for authentication"),
+):
+    try:
+        # Validate the API key
+        if unith_voice_x_api != "12345678":
+            raise HTTPException(status_code=401, detail="Invalid API Key")
+
+        text = request.text
+        logger.info(f"Starting streaming TTS for voice: {voice} with text: {text}")
+
+        # Use our stream_tts generator function from tts.py
+        audio_stream = make_elevenlabs_stream_tts_sample(
+            voice_id=voice,
+            text=request.text,
+        )
+
+        # Return streaming response
+        return StreamingResponse(
+            audio_stream,
+            media_type="audio/wav",
+            headers={"Content-Disposition": "attachment; filename=speech.wav"},
+        )
+
+    except ValueError as exc:
+        logger.error(f"Validation error: {exc}")
+        raise HTTPException(status_code=400, detail=str(exc))
+    except httpx.RequestError as exc:
+        logger.error(f"Request error: {exc}")
+        raise HTTPException(status_code=503, detail=f"Service unavailable: {exc}")
+    except httpx.HTTPStatusError as exc:
+        logger.error(f"HTTP error: {exc}")
+        status_code = exc.response.status_code if exc.response else 500
+        raise HTTPException(status_code=status_code, detail=f"HTTP error: {exc}")
     except Exception as exc:
         logger.error(f"Unexpected error: {exc}")
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(exc)}")
