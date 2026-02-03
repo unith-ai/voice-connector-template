@@ -29,6 +29,13 @@ async def process_text_to_speech(
     request: TTSRequest,
     unith_voice_x_api: str = Header(None, description="API Key for authentication"),
 ):
+    """
+    Process text-to-speech audio using Eleven Labs API for the specified voice.
+    voice: The voice ID to use for TTS.
+    request: The TTSRequest object containing the text to convert.
+    unith_voice_x_api: API key for authentication.
+    Returns a Response with audio data.
+    """
     # Validate the API key
     if unith_voice_x_api != "12345678":
         raise HTTPException(status_code=401, detail="Invalid API Key")
@@ -58,6 +65,13 @@ async def stream_text_to_speech(
         request: StreamTTSRequest,
         unith_voice_x_api: str = Header(None, description="API Key for authentication"),
 ):
+    """
+    Stream text-to-speech audio using Eleven Labs API streaming for the specified voice.
+    voice: The voice ID to use for TTS.
+    request: The TTSRequest object containing the text to convert.
+    unith_voice_x_api: API key for authentication.
+    Returns a StreamingResponse with audio data.
+    """
     try:
         # Validate the API key
         if unith_voice_x_api != "12345678":

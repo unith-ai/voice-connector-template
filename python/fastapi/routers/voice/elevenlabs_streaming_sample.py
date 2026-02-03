@@ -9,6 +9,12 @@ async def stream_text_tts(
         voice_id, text
 ) -> AsyncGenerator[bytes, None]:
     # voice_id follows this pattern: EXAVITQu4vr4xnSDxMaL
+    """
+    Stream text-to-speech audio using Eleven Labs API for the specified voice.
+    voice_id: The voice ID to use for TTS.
+    text: The text to convert to speech.
+    Returns an asynchronous generator yielding audio chunks.
+    """
 
     if not text:
         raise ValueError("Text cannot be empty")
@@ -69,7 +75,12 @@ async def stream_text_tts(
             raise
 
 async def make_elevenlabs_stream_tts_sample(voice_id: str, text: str) -> AsyncGenerator[bytes, None]:
-
+    """
+    Stream text-to-speech audio using Eleven Labs API streaming for the specified voice.
+    voice_id: The voice ID to use for TTS.
+    text: The text to convert to speech.
+    Returns an asynchronous generator yielding audio chunks.
+    """
     async for chunk in stream_text_tts(
             voice_id, text
     ):
