@@ -120,26 +120,11 @@ The `.github/workflows/ci.yml` workflow runs tests automatically on:
 ### Dependabot Review Workflow
 The `.github/workflows/dependabot-review.yml` workflow now uses the test suites to validate dependency updates:
 
-**Old approach (inefficient):**
-- Started servers manually with `yarn start` / `python main.py`
-- Tested endpoints with curl
-- Required 25-30 turns, 10+ minutes
-- Complex process management
-
-**New approach (optimized):**
 - Runs test suites: `yarn test` / `pytest`
 - Validates functionality without server management
 - Expected: 5-10 turns, 2-5 minutes
 - Simple command execution
 
-## Benefits of Unit Testing
-
-1. **Faster Validation** - Tests run in seconds vs minutes for manual server testing
-2. **Better Coverage** - Tests validate edge cases and error conditions
-3. **Dependency Safety** - Quickly verify that updates don't break functionality
-4. **Developer Experience** - Easy to run tests locally before committing
-5. **CI Efficiency** - Reduced Claude Code turn usage and execution time
-6. **Reliability** - Deterministic results without external dependencies
 
 ## Writing New Tests
 
@@ -183,12 +168,3 @@ def test_new_feature(client, mock_elevenlabs):
 - Ensure mock paths match the actual import paths
 - For Node.js: Mock the module being imported, not where it's defined
 - For Python: Use the full import path as it appears in the handler
-
-## Future Improvements
-
-Potential enhancements to the test suite:
-- Add integration tests with real TTS provider (in separate CI job)
-- Add load/performance testing
-- Add security testing (SQL injection, XSS, etc.)
-- Add contract testing for API compliance
-- Expand coverage to include edge cases
