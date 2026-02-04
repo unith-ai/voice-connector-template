@@ -17,6 +17,11 @@ python-dotenv = ">=1.1.0,<2.0.0"
 requests = "^2.32.5"
 h11 = ">=0.16.0"
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^6.0.0"
+pytest-asyncio = "^0.24.0"
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"

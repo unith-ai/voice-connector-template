@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage"
   },
   "author": "juan@unith.ai",
   "license": "ISC",
@@ -23,6 +23,8 @@
     "wavefile": "^11.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.3",
+    "supertest": "^7.0.0"
   }
 }

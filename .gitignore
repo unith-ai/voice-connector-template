@@ -166,3 +166,6 @@ cython_debug/
 .vscode
 
 /nodejs/**/node_modules
+
+AGENTS.md
+CLAUDE.md
