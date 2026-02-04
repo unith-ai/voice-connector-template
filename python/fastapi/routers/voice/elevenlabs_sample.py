@@ -13,6 +13,12 @@ def pcm_to_wav(pcm_data) -> bytes:
     return wav_io.getvalue()
 
 async def make_elevenlabs_tts_sample(voice_id: str, text: str) -> bytes:
+    """
+    Generate text-to-speech audio using Eleven Labs API for the specified voice.
+    voice_id: The voice ID to use for TTS.
+    text: The text to convert to speech.
+    Returns the audio data as bytes in WAV format.
+    """
     # voice_id follows this pattern: EXAVITQu4vr4xnSDxMaL
 
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}?output_format=pcm_16000"

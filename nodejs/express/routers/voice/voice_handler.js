@@ -1,6 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const {makeElevenlabsTtsSample} = require("./elevenlabs_sample");
+const {makeElevenlabsStreamTtsSample} = require("./elevenlabs_streaming_sample");
 
 const router = express.Router();
 
@@ -88,6 +89,101 @@ router.post('/tts/:voice', [
     console.error(`Unexpected error: ${error}`);
     return res.status(500).json({ detail: `Unexpected error: ${error.message}` });
   }
+});
+
+/**
+ * @swagger
+ * /stream-tts/{voice}:
+ *   post:
+ *     tags:
+ *       - Voice
+ *     summary: Stream text to speech
+ *     description: Converts text to speech and returns an audio stream
+ *     security:
+ *       - apiKey: []
+ *     parameters:
+ *       - in: path
+ *         name: voice
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The voice to use for text-to-speech conversion
+ *       - in: header
+ *         name: unith-voice-x-api
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: API key for authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - text
+ *             properties:
+ *               text:
+ *                 type: string
+ *                 description: The text to convert to speech
+ *     responses:
+ *       200:
+ *         description: Audio stream in WAV format (PCM 16k)
+ *         content:
+ *           audio/wav:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Bad request, missing or invalid parameters
+ *       401:
+ *         description: Unauthorized, invalid API key
+ *       500:
+ *         description: Server error
+ */
+router.post('/stream-tts/:voice', [
+    // Validate request body
+    body('text').notEmpty().withMessage('Text is required'),
+], async (req, res) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Validate API key
+    const apiKey = req.header('unith-voice-x-api');
+    if (apiKey !== '12345678') {
+        return res.status(401).json({ detail: 'Invalid API Key' });
+    }
+
+    const voice = req.params.voice;
+    const text = req.body.text;
+
+    console.log(`Starting streaming TTS for voice: ${voice} with text: ${text}`);
+
+    try {
+        const audioStream = await makeElevenlabsStreamTtsSample(voice, text);
+
+        // Return streaming response
+        res.setHeader('Content-Type', 'audio/wav');
+        res.setHeader('Content-Disposition', 'attachment; filename=speech.wav');
+
+        audioStream.pipe(res);
+
+        audioStream.on('error', (error) => {
+            console.error(`Stream error: ${error}`);
+            if (!res.headersSent) {
+                res.status(500).json({ detail: `Stream error: ${error.message}` });
+            } else {
+                res.end();
+            }
+        });
+    } catch (error) {
+        console.error(`Unexpected error: ${error}`);
+        const statusCode = error.message.includes('ElevenLabs API error') ? 400 : 500;
+        return res.status(statusCode).json({ detail: `Unexpected error: ${error.message}` });
+    }
 });
 
 module.exports = router;

@@ -6,6 +6,7 @@ A set of examples to develop a private voice connector for the Unith platform.
 
 - a restful api service with a well-defined endpoint following this specification:
     - `POST /tts/{voice}` where voice is a string url param that defines the id of the voice to be used.
+    - `POST /stream-tts/{voice}` where voice is a string url param that defines the id of the voice to be used for streaming.
     - body: (the text to be converted to speech)
         ```json
         {
@@ -72,6 +73,7 @@ Both implementations provide the same core functionality:
 
 - Health check endpoint (`GET /health-check`)
 - Text-to-speech endpoint with API key authentication (`POST /tts/{voice}`)
+- Streaming Text-to-speech endpoint with API key authentication (`POST /stream-tts/{voice}`)
 - Swagger API documentation
 - CORS support
 - Docker support

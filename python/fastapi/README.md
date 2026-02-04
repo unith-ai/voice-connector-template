@@ -6,6 +6,7 @@ This is a Python FastAPI implementation of the Voice Connector Template.
 
 - Health check endpoint
 - Text-to-speech endpoint with API key authentication
+- Streaming text-to-speech endpoint with API key authentication
 - Swagger API documentation
 - CORS support
 - Docker support
@@ -97,6 +98,30 @@ Converts text to speech using the specified voice.
 #### Response
 
 Binary audio data (WAV format) with appropriate headers for download.
+
+### Streaming Text-to-Speech
+
+```
+POST /stream-tts/{voice}
+```
+
+Converts text to speech using the specified voice and returns an audio stream.
+
+#### Request Headers
+
+- `unith-voice-x-api`: API key for authentication (required)
+
+#### Request Body
+
+```json
+{
+  "text": "Text to convert to speech"
+}
+```
+
+#### Response
+
+Binary audio stream (WAV format) with appropriate headers for streaming.
 
 ## API Documentation
 
